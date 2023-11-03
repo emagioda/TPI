@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 
+//LINEA NUEVA
+
 struct usuario
 {
     int nroCuenta;   // Número entero entre el 100 y el 999.
