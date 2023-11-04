@@ -1,18 +1,16 @@
 #include <stdio.h>
 #include <string.h>
 
-//LINEA NUEVA
+const int CANT_CLIENTES = 10; // Cantidad de clientes.
 
 struct usuario
 {
     int nroCuenta;   // Número entero entre el 100 y el 999.
     int clave;       // Número entero positivo de 4 digitos.
     char nombre[10]; // Cadena de caracteres de maximo 10 caracteres.
-    int saldo;       // Número entero positivo.
+    float saldo;     // Número entero positivo.
     int estado;      // Número entero (0 o 1).
 };
-
-// int cantClientes = 10; // Cantidad de clientes.
 
 // Carga el arreglo con datos de clientes.
 void carga(struct usuario cliente[])
@@ -88,14 +86,83 @@ void carga(struct usuario cliente[])
     cliente[9].estado = 1;
 }
 
-// Devuelve 1 si el ususario puede iniciar sesión, 0 en caso contrario.
+// Recibe el array de clientes y el numero de cuenta ingresado por el cliente y verifica si su cuenta existe en el sistema.
+// Si lo encuentra, devulve el indice donde se ubica, en caso contrario, devuelve -1.
+int busqueda(struct usuario cliente[], int cuenta)
+{
+    int i = 0; // Indice del array.
+
+    while (i < CANT_CLIENTES && cuenta != cliente[i].nroCuenta)
+    {
+        i++;
+    }
+
+    // Verifica si se alcanzó el final del array y no se encontró coincidencia.
+    if (i == CANT_CLIENTES)
+    {
+        return -1;
+    }
+
+    // Si hubo coincidencia, devuelve el índice en el array donde se encuentra el usuario.
+    return i;
+}
+
+// Devuelve el índice del array del usuario si es apto para iniciar sesión, en caso contrario, devuelve -1.
 int sesion(struct usuario cliente[])
 {
-    int inicio = 0;
+    int intestosMax = 3, // Número máximo de intentos permitidos
+        user,            // Número de cuenta ingresado por el usuario
+        pin,             // Contraseña ingresada por el usuario
+        indice;          // Indice del usuario en el array
 
-    // ...
+    // Solicita al usuario que ingrese su número de cuenta.
+    printf("\nIngrese su n%cmero de cuenta:\n", 163);
+    scanf("%d", &user);
 
-    return inicio;
+    // Busca el usuario en el array de clientes.
+    indice = busqueda(cliente, user);
+
+    // Si el usuario no se encuentra en el array, devuelve -1.
+    if (indice < 0)
+    {
+        printf("Usuario no encontrado.\n");
+        return -1;
+    }
+
+    // Si la cuenta del usuario está activa...
+    if (cliente[indice].estado)
+    {
+        do
+        {
+            // Solicita al usuario que ingrese su contraseña.
+            printf("Ingrese su contrase%ca: (intentos restantes: %d)\n", 164, intestosMax);
+            scanf("%d", &pin);
+
+            // Si la contraseña ingresada no coincide, mustra un mensaje de error y reduce el número de intentos restantes.
+            if (cliente[indice].clave != pin)
+            {
+                printf("\nContrase%ca Incorrecta.\n", 164);
+                intestosMax--;
+            }
+        } while (intestosMax > 0 && cliente[indice].clave != pin);
+
+        // Si se agotan los intentos, bloquea la cuenta y notifica al usuario.
+        if (intestosMax == 0)
+        {
+            cliente[indice].estado = 0;
+            printf("No se permiten más intentos. Su cuenta ha sido bloqueada; comuníquese con la entidad bancaria.\n");
+            return -1;
+        }
+
+        // Si la autenticación fue exitosa, devolve el índice del array donde se ubica el usuario.
+        return indice;
+    }
+    else
+    {
+        // Si la cuenta está bloqueada, se le notifica al usuario.
+        printf("Su cuenta está bloqueada; comuníquese con la entidad bancaria.\n");
+        return -1;
+    }
 }
 
 // Muestra en pantalla el menú de opciones.
@@ -149,19 +216,18 @@ void opciones(int opcion)
 // Programa Principal.
 void main()
 {
-    int cantClientes = 10, // Cantidad de clientes.
-        user,
-        pin,
-        opcion; 
+    int indice,
+        opcion;
 
-    struct usuario cliente[cantClientes]; // Array de clientes.
+    struct usuario cliente[CANT_CLIENTES]; // Array de clientes.
 
-
-    carga(cliente);
+    carga(cliente); // Carga el array de clientes con datos de tipo usuario.
 
     while (1)
     {
-        if (sesion(cliente))
+        indice = sesion(cliente); // Si el usuario es válido, devuelve su ubicación; en caso contrario, -1.
+
+        if (indice >= 0)
         {
             do
             {
