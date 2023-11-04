@@ -165,6 +165,56 @@ int sesion(struct usuario cliente[])
     }
 }
 
+/**************************************************************************************/
+void trasferencia (struct usuario cliente[], int indice){
+    int nroCuentaDestino;
+    float montoTransferir=0.0;
+    int indiceDestino;
+
+    printf("Ingrese numero de cuenta de destino: ");
+    scanf ("%d", &nroCuentaDestino);
+
+    indiceDestino= busqueda(cliente,  nroCuentaDestino);
+
+    if (!cliente[indiceDestino].estado){
+        printf("La cuenta de destino esta bloqueda. \n");
+        return ;
+    }
+
+    if (cliente[indice].nroCuenta == nroCuentaDestino){
+        printf("\n El numero de destino es el mismo que de origen \n");
+        return;
+    }
+
+    if (indiceDestino >= 0)
+    {
+        printf("Ingresar monto a tranferir: ");
+        scanf ("%f", &montoTransferir);
+        if (cliente[indice].saldo >= montoTransferir){
+            cliente[indice].saldo -= montoTransferir;
+            cliente[indiceDestino].saldo += montoTransferir;
+            printf("*************************************\n");
+            printf("Transferido con exito.\n");
+            printf("Saldo cuenta origen: $ %.2f \n",cliente[indice].saldo);
+            printf("Saldo cuenta destino: $ %.2f \n",cliente[indiceDestino].saldo);
+            printf("*************************************\n");
+            return;
+        }
+        else
+        {
+            printf("\n El monto ingresado es inferior al saldo de su cuenta ! \n");
+            return;
+        }
+    }
+    else{
+        printf("\n La cuenta ingresada no existe ! \n");
+        return;
+    }
+}
+/**************************************************************************************/
+
+
+
 // Muestra en pantalla el menú de opciones.
 void menu()
 {
@@ -179,7 +229,7 @@ void menu()
 }
 
 // Recibe la opción elegida por el usuario y ejecuta su función correspondiente.
-void opciones(int opcion)
+void opciones(struct usuario cliente[], int opcion, int indice)
 {
     switch (opcion)
 
@@ -197,7 +247,8 @@ void opciones(int opcion)
         break;
 
     case 4:
-        //
+        trasferencia (cliente, indice);
+      
         break;
     case 5:
         //
@@ -233,7 +284,7 @@ void main()
             {
                 menu();               // Imprime el menú.
                 scanf("%d", &opcion); // Lee la opción.
-                opciones(opcion);     // Escoje la operación.
+                opciones(cliente, opcion, indice);     // Escoje la operación.
 
             } while (opcion != 6);
         }
