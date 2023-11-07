@@ -5,13 +5,13 @@ const int CANT_CLIENTES = 10; // Cantidad de clientes.
 
 struct usuario
 {
-    int nroCuenta;   // Número entero entre el 100 y el 999.
-    int clave;       // Número entero positivo de 4 digitos.
-    char nombre[10]; // Cadena de caracteres de maximo 10 caracteres.
-    float saldo;     // Número entero positivo.
-    int estado;      // Número entero (0 o 1).
+    int nroCuenta;          // Número entero entre el 100 y el 999.
+    int clave;              // Número entero positivo de 4 digitos.
+    char nombre[20];        // Cadena de caracteres de maximo 10 caracteres.
+    float saldo;            // Número entero positivo.
+    int estado;             // Número entero (0 o 1).
 };
-
+/*******************************************************************************************************************/
 // Carga el arreglo con datos de clientes.
 void carga(struct usuario cliente[])
 {
@@ -85,7 +85,7 @@ void carga(struct usuario cliente[])
     cliente[9].saldo = 9467;
     cliente[9].estado = 1;
 }
-
+/*******************************************************************************************************************/
 // Recibe el array de clientes y el numero de cuenta ingresado por el cliente y verifica si su cuenta existe en el sistema.
 // Si lo encuentra, devulve el indice donde se ubica, en caso contrario, devuelve -1.
 int busqueda(struct usuario cliente[], int cuenta)
@@ -106,7 +106,7 @@ int busqueda(struct usuario cliente[], int cuenta)
     // Si hubo coincidencia, devuelve el índice en el array donde se encuentra el usuario.
     return i;
 }
-
+/*******************************************************************************************************************/
 // Devuelve el índice del array del usuario si es apto para iniciar sesión, en caso contrario, devuelve -1.
 int sesion(struct usuario cliente[])
 {
@@ -165,7 +165,7 @@ int sesion(struct usuario cliente[])
     }
 }
 
-/**************************************************************************************/
+/*******************************************************************************************************************/
 void trasferencia (struct usuario cliente[], int indice){
     int nroCuentaDestino;
     float montoTransferir=0.0;
@@ -211,10 +211,7 @@ void trasferencia (struct usuario cliente[], int indice){
         return;
     }
 }
-/**************************************************************************************/
-
-
-
+/*******************************************************************************************************************/
 // Muestra en pantalla el menú de opciones.
 void menu()
 {
@@ -227,31 +224,40 @@ void menu()
     printf("5. Mostrar cantidad de Operaciones Realizadas y Saldo Actual.\n");
     printf("6. Salir de la Sesión.\n");
 }
+/*******************************************************************************************************************/
 
 // Recibe la opción elegida por el usuario y ejecuta su función correspondiente.
 void opciones(struct usuario cliente[], int opcion, int indice)
 {
     switch (opcion)
-
     {
-    case 1:
-        //
+    case 1:        
+        printf ("ingresar monto: ");
+        float montoDepositar;
+        scanf("%f",&montoDepositar);
+        cliente[indice].saldo += montoDepositar;
         break;
 
     case 2:
-        //
+        printf("Ingresar monto: ");
+        float extraer;
+        scanf("%f",&extraer);
+        if (cliente[indice].saldo >= extraer){
+            cliente[indice].saldo -= extraer;
+        }
+        else
+        {
+            printf("Su saldo es insuficiente para realizar esta operacion.");
+        }
         break;
-
     case 3:
-        //
+        printf("Saldo disponible: %.1f", cliente[indice].saldo);
         break;
-
     case 4:
-        trasferencia (cliente, indice);
-      
+        trasferencia (cliente, indice);      
         break;
     case 5:
-        //
+        printf("Saldo disponible: %.1f",cliente[indice].saldo);
         break;
     case 6:
         printf("Gracias por utilizar nuestro servicio.\n");
@@ -263,12 +269,11 @@ void opciones(struct usuario cliente[], int opcion, int indice)
         break;
     }
 }
-
+/*******************************************************************************************************************/
 // Programa Principal.
 void main()
 {
-    int indice,
-        opcion;
+    int indice,opcion,contadorOperaciones;
 
     struct usuario cliente[CANT_CLIENTES]; // Array de clientes.
 
@@ -278,15 +283,26 @@ void main()
     {
         indice = sesion(cliente); // Si el usuario es válido, devuelve su ubicación; en caso contrario, -1.
 
+        contadorOperaciones=0;
+
         if (indice >= 0)
         {
             do
             {
-                menu();               // Imprime el menú.
-                scanf("%d", &opcion); // Lee la opción.
-                opciones(cliente, opcion, indice);     // Escoje la operación.
+                menu();       
 
-            } while (opcion != 6);
+                scanf("%d", &opcion);       
+
+                opciones(cliente,  opcion,  indice);
+
+                ++contadorOperaciones;
+
+                if (contadorOperaciones>=10){
+                    printf("Se alcanzo el maximo de 10 operacion, vuelva a iniciar sesion.");
+                }
+
+            } while (opcion != 6 && contadorOperaciones<=10);
         }
     }
 }
+/*******************************************************************************************************************/
