@@ -2,6 +2,7 @@
 #include <string.h>
 
 const int CANT_CLIENTES = 10; // Cantidad de clientes.
+int contadorOperaciones=0;//Inicializamos el contador de operaciones realizadas.
 
 struct usuario
 {
@@ -141,7 +142,7 @@ int sesion(struct usuario cliente[])
                 // Si la contraseña ingresada no coincide, mustra un mensaje de error y reduce el número de intentos restantes.
                 if (cliente[indice].clave != pin)
                 {
-                    printf("\nContrase%ca Incorrecta.\n", 164);
+                    printf("\nContrase%ca incorrecta.\n", 164);
                     intestosMax--;
                 }
             } while (intestosMax > 0 && cliente[indice].clave != pin);
@@ -150,14 +151,14 @@ int sesion(struct usuario cliente[])
             if (intestosMax == 0)
             {
                 cliente[indice].estado = 0;
-                printf("No se permiten mas intentos. Su cuenta ha sido bloqueada; comuníquese con la entidad bancaria.\n");
+                printf("No se permiten m%cs intentos. Su cuenta ha sido bloqueada; comun%cquese con la entidad bancaria.\n", 160, 161);
                 indice = -1;
             }
         }
         else
         {
             // Si la cuenta está bloqueada, se le notifica al usuario.
-            printf("Su cuenta está bloqueada; comuníquese con la entidad bancaria.\n");
+            printf("Su cuenta est%c bloqueada; comun%cquese con la entidad bancaria.\n",160,161);
             indice = -1;
         }
     }
@@ -175,14 +176,36 @@ int sesion(struct usuario cliente[])
 void menu()
 {
     printf("\n-------- MENU --------\n");
-    printf("1. Realizar un Deposito.\n");
-    printf("2. Realizar una Extraccion.\n");
+    printf("1. Realizar un Dep%csito.\n", 162);
+    printf("2. Realizar una Extracci%cn.\n", 162);
     printf("3. Consultar el Saldo de la Cuenta.\n");
     printf("4. Realizar una Transferencia entre Cuentas.\n");
     printf("5. Mostrar cantidad de Operaciones Realizadas y Saldo Actual.\n");
-    printf("6. Salir de la Sesion.\n");
+    printf("6. Salir de la Sesi%cn.\n", 162);
     printf("----------------------\n");
 }
+/*******************************************************************************************************************/
+void deposito(struct usuario cliente[], int indice)
+{ // Agregamos la función para que se realicen depositos en la cuenta
+    float montoDeposito;
+
+    printf("Ingrese el monto a depositar en su cuenta: ");
+    scanf("%f", &montoDeposito);
+
+    if (montoDeposito > 0)
+    { // validamos que ingrese un numero positivo
+        cliente[indice].saldo += montoDeposito;
+        printf("--------------------------------------\n");
+        printf("Dep%csito realizado de forma exitosa.\n", 162);
+        printf("Saldo actual: $%.2f\n", cliente[indice].saldo); // mostramos el saldo actual del cliente por pantalla
+        printf("--------------------------------------*\n");
+    }
+    else
+    {
+        printf("El monto ingresado es inv%clido. Ingrese un valor positivo.\n",160);
+    }
+}
+
 /*******************************************************************************************************************/
 // Realiza una transferencia entre usuarios.
 void trasferencia(struct usuario cliente[], int indice)
@@ -191,20 +214,20 @@ void trasferencia(struct usuario cliente[], int indice)
     float montoTransferir = 0.0;
     int indiceDestino;
 
-    printf("Ingrese numero de cuenta de destino: ");
+    printf("Ingrese n%cmero de cuenta de destino: ", 163);
     scanf("%d", &nroCuentaDestino);
 
     indiceDestino = busqueda(cliente, nroCuentaDestino);
 
     if (!cliente[indiceDestino].estado)
     {
-        printf("La cuenta de destino esta bloqueda. \n");
+        printf("La cuenta de destino est%c bloqueda. \n",160);
         return;
     }
 
     if (cliente[indice].nroCuenta == nroCuentaDestino)
     {
-        printf("\n El numero de destino es el mismo que de origen \n");
+        printf("\n El n%cmero de destino es el mismo que de origen \n",163);
         return;
     }
 
@@ -217,7 +240,7 @@ void trasferencia(struct usuario cliente[], int indice)
             cliente[indice].saldo -= montoTransferir;
             cliente[indiceDestino].saldo += montoTransferir;
             printf("*************************************\n");
-            printf("Transferido con exito.\n");
+            printf("Transferido con %cxito.\n",130);
             printf("Saldo cuenta origen: $ %.2f \n", cliente[indice].saldo);
             printf("Saldo cuenta destino: $ %.2f \n", cliente[indiceDestino].saldo);
             printf("*************************************\n");
@@ -242,10 +265,8 @@ void opciones(struct usuario cliente[], int opcion, int indice, int cantOp)
     switch (opcion)
     {
     case 1:
-        printf("Ingresar monto: ");
-        float montoDepositar;
-        scanf("%f", &montoDepositar);
-        cliente[indice].saldo += montoDepositar;
+        deposito(cliente, indice);
+        ++contadorOperaciones;
         break;
 
     case 2:
@@ -258,14 +279,17 @@ void opciones(struct usuario cliente[], int opcion, int indice, int cantOp)
         }
         else
         {
-            printf("\nSu saldo es insuficiente para realizar esta operacion.\n");
+            printf("\nSu saldo es insuficiente para realizar esta operaci%cn.\n",162);
         }
+        ++contadorOperaciones;
         break;
     case 3:
         printf("\nSaldo disponible: $%.2f\n", cliente[indice].saldo);
+        ++contadorOperaciones;
         break;
     case 4:
         trasferencia(cliente, indice);
+        ++contadorOperaciones;
         break;
     case 5:
         printf("\nOperaciones realizadas: %d \n", cantOp);
@@ -276,7 +300,7 @@ void opciones(struct usuario cliente[], int opcion, int indice, int cantOp)
         break;
 
     default:
-        printf("\nOpcion invalida.\n");
+        printf("\nOpci%cn invalida.\n",162);
         break;
     }
 }
@@ -286,7 +310,7 @@ void limiteOperaciones(int contador, int maximo)
 {
     if (contador >= maximo)
     {
-        printf("\nAlcanzó el máximo de %d operaciones, iniciar sesion nuevamente para seguir operando.\n", maximo);
+        printf("\nAlcanz%c el máximo de %d operaciones, iniciar sesion nuevamente para seguir operando.\n",162, maximo);
     }
 }
 /*******************************************************************************************************************/
@@ -296,7 +320,6 @@ void main()
 {
     int indice,
         opcion,
-        contadorOperaciones,
         operacionesMax = 10;
 
     struct usuario cliente[CANT_CLIENTES]; // Array de clientes.
@@ -313,11 +336,9 @@ void main()
         {
             do
             {
-                ++contadorOperaciones;
-
                 menu(); // Muestra el menú de opciones.
 
-                printf("Ingrese una opción: ");
+                printf("Ingrese una opci%cn: ", 162);
                 scanf("%d", &opcion);
 
                 opciones(cliente, opcion, indice, contadorOperaciones);
