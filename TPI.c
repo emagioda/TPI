@@ -250,7 +250,7 @@ void extraccion(struct usuario cliente[], int indice)
 
     cliente[indice].saldo -= montoExtraccion;
     printf("--------------------------------------\n");
-    printf("Extracci%n realizada de forma exitosa.\n", 162);
+    printf("Extracci%cn realizada de forma exitosa.\n", 162);
     printf("Saldo actual: $%.2f\n", cliente[indice].saldo); // Se muestra el saldo actual del cliente.
     printf("--------------------------------------\n");
 }
