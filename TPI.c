@@ -41,7 +41,7 @@ void carga(struct usuario cliente[])
     cliente[1].nroCuenta = 361;
     cliente[1].clave = 1798;
     strcpy(cliente[1].nombre, "Laura");
-    cliente[1].saldo = 18625;
+    cliente[1].saldo = 0;
     cliente[1].estado = 1;
 
     // Cliente 3
@@ -262,6 +262,11 @@ void trasferencia(struct usuario cliente[], int indice)
         indiceDestino;     // Indice del número de cuanta a transferir.
     float montoTransferir; // Dinero a transferir
 
+    if (cliente[indice].saldo==0){
+        printf("\nSu cuenta no tiene saldo para realizar tranferencias.\n");
+        return ;
+    }
+
     printf("Ingrese n%cmero de cuenta de destino: ", 163);
     scanf("%d", &nroCuentaDestino);
 
@@ -308,7 +313,7 @@ void limiteOperaciones(int contador, int maximo)
 {
     if (contador >= maximo)
     {
-        printf("\nAlcanz%c el máximo de %d operaciones, iniciar sesion nuevamente para seguir operando.\n", 162, maximo);
+        printf("\nAlcanz%c el maximo de %d operaciones, iniciar sesion nuevamente para seguir operando.\n", 162, maximo);
     }
 }
 /*******************************************************************************************************************/
