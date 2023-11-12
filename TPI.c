@@ -230,10 +230,9 @@ void deposito(struct usuario cliente[], int indice)
 
     cliente[indice].saldo += montoDeposito;
 
-    printf("--------------------------------------\n");
+    printf("\n------------------------------------\n");
     printf("Dep%csito realizado de forma exitosa.\n", 162);
-    printf("Saldo actual: $%.2f\n", cliente[indice].saldo); // Se muestra el saldo actual del cliente.
-    printf("--------------------------------------\n");
+    printf("------------------------------------\n");
 }
 /*******************************************************************************************************************/
 // Realiza una opreación de extracción en la cuenta de un cliente.
@@ -253,9 +252,8 @@ void extraccion(struct usuario cliente[], int indice)
     }
 
     cliente[indice].saldo -= montoExtraccion;
-    printf("--------------------------------------\n");
+    printf("\n--------------------------------------\n");
     printf("Extracci%cn realizada de forma exitosa.\n", 162);
-    printf("Saldo actual: $%.2f\n", cliente[indice].saldo); // Se muestra el saldo actual del cliente.
     printf("--------------------------------------\n");
 }
 /*******************************************************************************************************************/
@@ -300,15 +298,14 @@ void trasferencia(struct usuario cliente[], int indice)
 
         cliente[indice].saldo -= montoTransferir;
         cliente[indiceDestino].saldo += montoTransferir;
-        printf("\n*************************************\n");
+        printf("\n-----------------------------------------------\n");
         printf("La transferencia a %s se realiz%c con %cxito\n", cliente[indiceDestino].nombre, 162, 130);
-        printf("Saldo actual de su cuenta: $%.2f \n", cliente[indice].saldo);
-        printf("*************************************\n");
+        printf("-----------------------------------------------\n");
         return;
     }
     else
     {
-        printf("El número de cuenta ingresado no existe!\n");
+        printf("El n%cmero de cuenta ingresado no existe!\n", 163);
         return;
     }
 }
@@ -337,23 +334,29 @@ void opciones(struct usuario cliente[], int opcion, int indice, int cantOp)
         extraccion(cliente, indice); // Ejecuta la función de extracción.
         break;
     case 3:
-        ++contadorOperaciones;                                        // Suma 1 al contador de operaciones.
-        printf("\nSaldo disponible: $%.2f\n", cliente[indice].saldo); // Muetra  el saldo disponible.
+        ++contadorOperaciones; // Suma 1 al contador de operaciones.
+        printf("\n------------------------\n");
+        printf("Saldo disponible: $%.2f\n", cliente[indice].saldo); // Muetra  el saldo disponible.
+        printf("------------------------\n");
         break;
     case 4:
         ++contadorOperaciones;         // Suma 1 al contador de operaciones.
         trasferencia(cliente, indice); // Ejecuta la función de transferencia.
         break;
     case 5:
-        printf("\nOperaciones realizadas: %d\n", cantOp);        // Muetra el total de operaciones realizadas hasta el momento.
+        printf("\n------------------------\n");
+        printf("Operaciones realizadas: %d\n", cantOp);          // Muetra el total de operaciones realizadas hasta el momento.
         printf("Saldo Actual: $%.2f \n", cliente[indice].saldo); // Muestra el saldo actual.
+        printf("------------------------\n");
         break;
     case 6:
-        printf("\nGracias por utilizar nuestros servicios.\n"); // Mensaje de despedida.
+        printf("\n----------------------------------------\n");
+        printf("Gracias por utilizar nuestros servicios.\n"); // Mensaje de despedida.
+        printf("----------------------------------------\n");
         break;
 
     default:
-        printf("\nOpci%cn inv%clida.\n", 162, 160);
+        printf("\nOpci%cn inv%clida. Ingrese un n%cmero del 1 al 6.\n", 162, 160,163);
         break;
     }
 }
