@@ -130,7 +130,7 @@ int validarCuenta(int cuenta)
 
     while (cuenta < minimo || cuenta > maximo)
     {
-        printf("N%cmero de cuenta inv%clido, ingrese un n%cmero entre %d y %d", 163, 160, 163, minimo, maximo);
+        printf("\nN%cmero de cuenta inv%clido, ingrese un n%cmero entre %d y %d", 163, 160, 163, minimo, maximo);
         printf("\nIngrese el n%cmero de cuenta nuevamente:\n", 163);
         scanf("%d", &cuenta);
     }
@@ -177,14 +177,18 @@ int sesion(struct usuario cliente[])
             if (intestosMax == 0)
             {
                 cliente[indice].estado = 0;
-                printf("No se permiten m%cs intentos. Su cuenta ha sido bloqueada; comun%cquese con la entidad bancaria.\n", 160, 161);
+                printf("No se permiten m%cs intentos. Su cuenta ha sido bloqueada, comun%cquese con la entidad bancaria.\n", 160, 161);
                 indice = -1;
+            }
+            else // Sino se muestra un mensaje de bienvenida.
+            {
+                printf("\n¡Bienvenido/a %s!\n", cliente[indice].nombre);
             }
         }
         else
         {
             // Si la cuenta está bloqueada, se le notifica al usuario.
-            printf("Su cuenta est%c bloqueada; comun%cquese con la entidad bancaria.\n", 160, 161);
+            printf("Su cuenta est%c bloqueada, comun%cquese con la entidad bancaria.\n", 160, 161);
             indice = -1;
         }
     }
@@ -262,9 +266,10 @@ void trasferencia(struct usuario cliente[], int indice)
         indiceDestino;     // Indice del número de cuanta a transferir.
     float montoTransferir; // Dinero a transferir
 
-    if (cliente[indice].saldo==0){
+    if (cliente[indice].saldo == 0)
+    {
         printf("\nSu cuenta no tiene saldo para realizar tranferencias.\n");
-        return ;
+        return;
     }
 
     printf("Ingrese n%cmero de cuenta de destino: ", 163);
@@ -348,7 +353,7 @@ void opciones(struct usuario cliente[], int opcion, int indice, int cantOp)
         break;
 
     default:
-        printf("\nOpci%cn invalida.\n", 162);
+        printf("\nOpci%cn inv%clida.\n", 162, 160);
         break;
     }
 }
